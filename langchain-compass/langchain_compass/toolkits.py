@@ -4,6 +4,8 @@ from typing import List, Optional
 
 from langchain_core.tools import BaseTool, BaseToolkit
 
+from langchain_compass.openapi_tool_maker import make_tools
+
 
 class LangchainCompassToolkit(BaseToolkit):
     # TODO: Replace all TODOs in docstring. See example docstring:
@@ -72,5 +74,10 @@ class LangchainCompassToolkit(BaseToolkit):
         self.api_key = compass_api_key
 
     def get_tools(self) -> List[BaseTool]:
-        compass_tools: List[BaseTool] = []
+        compass_tools: List[BaseTool] = make_tools(
+            "https://api.compasslabs.ai/openapi.json",
+            api_key=self.api_key,
+            func_check_direct_return=lambda r: r.__name__.lower()
+            in ["unsignedtransaction", "image"],
+        )
         return compass_tools
