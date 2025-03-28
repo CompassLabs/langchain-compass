@@ -1,7 +1,8 @@
 from typing import Type
 
-from langchain_compass.tools import LangchainCompassTool
 from langchain_tests.integration_tests import ToolsIntegrationTests
+
+from langchain_compass.tools import LangchainCompassTool
 
 
 class TestParrotMultiplyToolIntegration(ToolsIntegrationTests):

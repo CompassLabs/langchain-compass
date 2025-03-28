@@ -1,6 +1,6 @@
 """LangchainCompass toolkits."""
 
-from typing import List
+from typing import List, Optional
 
 from langchain_core.tools import BaseTool, BaseToolkit
 
@@ -67,6 +67,10 @@ class LangchainCompassToolkit(BaseToolkit):
 
     """  # noqa: E501
 
-    # TODO: This method must be implemented to list tools.
+    def __int__(self, compass_api_key: Optional[str]) -> None:
+        super().__init__()
+        self.api_key = compass_api_key
+
     def get_tools(self) -> List[BaseTool]:
-        raise NotImplementedError()
+        compass_tools: List[BaseTool] = []
+        return compass_tools

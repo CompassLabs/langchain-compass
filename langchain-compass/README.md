@@ -32,7 +32,7 @@ from langchain_compass import LangchainCompassEmbeddings
 
 embeddings = LangchainCompassEmbeddings()
 embeddings.embed_query("What is the meaning of life?")
-```
+```[README.md](../README.md)
 
 ## LLMs
 `LangchainCompassLLM` class exposes LLMs from LangchainCompass.
