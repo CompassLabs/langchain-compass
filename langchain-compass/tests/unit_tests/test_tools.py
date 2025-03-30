@@ -1,28 +1,30 @@
-from typing import Type
+from typing import Any
 
 from langchain_tests.unit_tests import ToolsUnitTests
 
-from langchain_compass.tools import LangchainCompassTool
+from langchain_compass.toolkits import LangchainCompassToolkit
+
+tools = LangchainCompassToolkit(compass_api_key=None).get_tools()
 
 
-class TestParrotMultiplyToolUnit(ToolsUnitTests):
-    @property
-    def tool_constructor(self) -> Type[LangchainCompassTool]:
-        return LangchainCompassTool
+for tool in tools:
+    class_name = f"Test{tool.name.capitalize()}Tool"
 
-    @property
-    def tool_constructor_params(self) -> dict:
-        # if your tool constructor instead required initialization arguments like
-        # `def __init__(self, some_arg: int):`, you would return those here
-        # as a dictionary, e.g.: `return {'some_arg': 42}`
-        return {}
+    def make_class(tool: Any) -> type[ToolsUnitTests]:
+        class _ToolTest(ToolsUnitTests):
+            @property
+            def tool_constructor(self) -> type[tool.__class__]:
+                return tool.__class__
 
-    @property
-    def tool_invoke_params_example(self) -> dict:
-        """
-        Returns a dictionary representing the "args" of an example tool call.
+            @property
+            def tool_constructor_params(self) -> dict:
+                return {}
 
-        This should NOT be a ToolCall dict - i.e. it should not
-        have {"name", "id", "args"} keys.
-        """
-        return {"a": 2, "b": 3}
+            @property
+            def tool_invoke_params_example(self) -> dict:
+                return tool.example_args or {}
+
+        return _ToolTest
+
+    # Dynamically add it to the module so pytest can discover it
+    globals()[class_name] = make_class(tool)

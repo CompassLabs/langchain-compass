@@ -3,6 +3,7 @@
 from typing import List, Optional
 
 from langchain_core.tools import BaseTool, BaseToolkit
+from pydantic import Field
 
 from langchain_compass.openapi_tool_maker import make_tools
 
@@ -69,15 +70,23 @@ class LangchainCompassToolkit(BaseToolkit):
 
     """  # noqa: E501
 
-    def __int__(self, compass_api_key: Optional[str]) -> None:
+    api_key: Optional[str] = Field(default=None, alias="compass_api_key")
+
+    def __init__(self, compass_api_key: Optional[str] = None) -> None:
         super().__init__()
         self.api_key = compass_api_key
 
     def get_tools(self) -> List[BaseTool]:
-        compass_tools: List[BaseTool] = make_tools(
+        compass_tools: List[BaseTool]
+        compass_tools = make_tools(
             "https://api.compasslabs.ai/openapi.json",
             api_key=self.api_key,
             func_check_direct_return=lambda r: r.__name__.lower()
             in ["unsignedtransaction", "image"],
         )
+        compass_tools = [
+            tool
+            for tool in compass_tools
+            if "aero" not in tool.get_name() and "set_any" not in tool.get_name()
+        ]
         return compass_tools

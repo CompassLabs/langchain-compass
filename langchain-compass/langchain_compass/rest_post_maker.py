@@ -16,6 +16,7 @@ def make_post_tool(
     url1: str,
     response_type1: type,
     api_key: Optional[str] = None,
+    example_args1: Optional[dict] = None,
 ) -> type[BaseTool]:
     class PostRequestTool(BaseTool):
         name: str = name1
@@ -25,6 +26,7 @@ def make_post_tool(
         return_direct: bool = return_direct1
         verbose: bool = True
         response_type: Any = response_type1
+        example_args: Optional[dict] = example_args1
 
         def _run(
             self,

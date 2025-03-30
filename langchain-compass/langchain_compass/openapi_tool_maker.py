@@ -84,6 +84,11 @@ def make_tools(
                     if func_check_direct_return is None
                     else func_check_direct_return(response_type),
                     response_type1=response_type,
+                    example_args1=openapi_data["components"]["schemas"][schema_name][
+                        "example"
+                    ]
+                    if "example" in openapi_data["components"]["schemas"][schema_name]
+                    else None,
                 )()
             )
         if "get" in openapi_data["paths"][path]:
