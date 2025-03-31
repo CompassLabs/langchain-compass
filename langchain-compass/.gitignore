@@ -1,1 +1,7 @@
 __pycache__
+agent.py
+answer_types.py
+./.env
+*.iml
+*.xml
+**/*/temp.json
